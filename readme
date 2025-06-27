@@ -1,0 +1,8 @@
+1. Bajar el repositorio
+2. Crear una Base de datos dentro del servidor de bases de datos.
+3. Ejecutar script.sql en la base de datos que se haya creado 
+3.1. Dentro del script.sql se hacen inserts de algunos registros a modo de ejemplo, para poder hacer la prueba
+4. En un visual Studio abrir la solucion webMED.sln
+5. Dentro del proyecto, abrir el archivo appsettings.json
+5.1. el parametro ConnectionString, DefaultConnection > Actualizar con los datos de servidor y base de datos creados en el punto 2. 
+
