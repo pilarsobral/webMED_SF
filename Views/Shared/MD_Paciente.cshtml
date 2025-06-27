@@ -1,0 +1,267 @@
+﻿
+@model webMED.Models.MDIngreso
+
+@{
+    ViewData["Title"] = "Ingreso Medico";
+}
+
+<div class="text-center">
+    <h4>Datos del Socio</h4>
+
+    <p>
+        <br />
+    <p>Buenos dias Dr. @Model.Medico.Apellido</p>
+    <br />
+    <div>
+
+
+        <form style="text-align: justify;" asp-action="Buscar" asp-controller="Medico">
+
+            <div class="form-group row">
+                <label for="idSocio" class="col-sm-3 col-form-label">ID Socio</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="idSocio" name="idSocio" value="@Model.Paciente.ID_GrupoSocio/@Model.Paciente.ID_Socio">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="nombre " class="col-sm-3 col-form-label">Nombre</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="nombre" name="nombre" value="@Model.Paciente.Nombre">
+                    <input type="text" class="form-control" id="apellido" name="apellido" value="@Model.Paciente.Apellido">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="fechaNacimiento" class="col-sm-3 col-form-label">Fecha de Nacimiento</label>
+                <div class="col-sm-9">
+                    <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" value="@Model.Paciente.FechaNacimiento.ToString("yyyy-MM-dd")">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="fechaIngreso" class="col-sm-3 col-form-label">Fecha de Ingreso</label>
+                <div class="col-sm-9">
+                    <input type="date" class="form-control" id="fechaIngreso" name="fechaIngreso" value="@Model.Paciente.FechaIngreso.ToString("yyyy-MM-dd")">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="telefono" class="col-sm-3 col-form-label">Teléfono</label>
+                <div class="col-sm-9">
+                    <input type="tel" class="form-control" id="telefono" name="telefono" value="@Model.Paciente.Telefono">
+                </div>
+            </div>
+            <div class="form-group row">
+
+                <label for="mail" class="col-sm-3 col-form-label">Mail</label>
+                <div class="col-sm-9">
+                    <input type="email" class="form-control" id="mail" name="mail" value="@Model.Paciente.Mail">
+                </div>
+            </div>
+
+
+
+
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <label>Condiciones</label>
+                    <table class="table table-bordered table-striped mt-2">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Condicion</th>
+                                <th>Estado</th>
+                                <th>Fecha Desde</th>
+                                <th>Fecha Hasta</th>
+                                <th>Observaciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Condiciones != null && Model.Condiciones.Any())
+                            {
+                                foreach (var condicion in Model.Condiciones)
+                                {
+                                    <tr>
+                                        <td>@condicion.Descripcion</td>
+                                        <td>@condicion.Estado</td>
+                                        <td>@condicion.FechaDesde.ToString("dd/MM/yyyy")</td>
+                                        <td>@condicion.FechaHasta.ToString("dd/MM/yyyy")</td>
+                                        <td>@condicion.Observaciones</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center">No hay condiciones registradas</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <br />
+
+
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <label>Medicamentos que esta Tomando Actualmente</label>
+                    <button type="button" class="btn btn-success mb-2" data-toggle="modal" data-target="#modalAgregarMedicamento">
+                        Agregar
+                    </button>
+                    <table class="table table-bordered table-striped mt-2">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Droga</th>
+                                <th>Medicamento</th>
+                                <th>Fecha Desde</th>
+                                <th>Fecha Hasta</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Medicamentos != null && Model.Medicamentos.Any())
+                            {
+                                foreach (var medicamento in Model.Medicamentos)
+                                {
+                                    if (!medicamento.Estado.Equals("Finalizado"))
+                                    {
+                                        <tr>
+                                            <td>@medicamento.DescripcionDroga</td>
+                                            <td>@medicamento.DescripcionMedicamento</td>
+                                            <td>@medicamento.FechaDesde.ToString("dd/MM/yyyy")</td>
+                                            <td>@medicamento.FechaHasta.ToString("dd/MM/yyyy")</td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center">No hay medicamentos registradas</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+    </p>
+
+    <div class="modal fade" id="modalAgregarMedicamento" tabindex="-1" role="dialog" aria-labelledby="modalAgregarMedicamentoLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id="formAgregarMedicamento">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalAgregarMedicamentoLabel">Agregar Medicamento</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="DrogaId">Droga</label>
+                            <select class="form-control" id="DrogaId" name="DrogaId" required>
+                                <option value="">Seleccione una droga</option>
+                            </select>
+                        </div>                        <div class="form-group">
+                            <label for="FechaDesde">Fecha Desde</label>
+                            <input type="date" class="form-control" name="FechaDesde" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="FechaHasta">Fecha Hasta</label>
+                            <input type="date" class="form-control" name="FechaHasta" />
+                        </div>
+
+                        <input type="hidden" name="Estado" value="Vigente" />
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#formAgregarMedicamento").submit(function (e) {
+            e.preventDefault();
+
+            var data = {
+                ID_GrupoSocio:@Model.Paciente.ID_GrupoSocio, 
+                ID_Socio:@Model.Paciente.ID_Socio,
+                ID_Droga: $("#DrogaId").val(),
+                FechaDesde: $("input[name='FechaDesde']").val(),
+                FechaHasta: $("input[name='FechaHasta']").val(),
+                Estado: "Pediente"
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AgregarDrogaAjax", "Medico")",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    console.log(response);
+
+                    if (response.retorno == "OK") {
+                        // Agregar nueva fila a la tabla
+                        var fila = "<tr>"
+                            + "<td>" + response.iD_Droga + "</td>"
+                            + "<td></td>"
+                            + "<td>" + response.fechaDesde + "</td>"
+                            + "<td>" + response.fechaHasta + "</td>"
+                            + "</tr>";
+                        $("table tbody").append(fila);
+                    }
+                    else {
+                        alert("Error al agregar el medicamento.\n\nEl medicamento " + response.descripcionDroga + " esta Contraindicado para una de las condiciones del paciente: " + response.descripcionCondicion );
+                    }
+
+                    // Cerrar modal
+                    $("#modalAgregarMedicamento").modal('hide');
+
+                    // Limpiar formulario
+                    $("#formAgregarMedicamento")[0].reset();
+                },
+                error: function () {
+                    alert("Error al agregar el medicamento.");
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        // Cargar el combo de drogas al abrir el modal
+        $('#modalAgregarMedicamento').on('show.bs.modal', function () {
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("ObtenerDrogas", "Medico")",
+                success: function (drogas) {
+                    var combo = $("#DrogaId");
+                    combo.empty();
+                    combo.append('<option value="">Seleccione una droga</option>');
+                    $.each(drogas, function (i, droga) {
+                        
+                        combo.append('<option value="' + droga.iD_Droga + '">' + droga.descripcion + '</option>');
+                    });
+                },
+                error: function () {
+                    alert("Error al cargar las drogas.");
+                }
+            });
+        });
+    });
+</script>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

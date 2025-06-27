@@ -1,0 +1,44 @@
+﻿
+@model webMED.Models.MDIngreso
+
+@{
+    ViewData["Title"] = "Ingreso Medico";
+}
+
+<div class="text-center">
+    <h4>Ingrese Nro de Grupo y ID de Socio</h4>
+
+    <p>
+        <br />
+    <p>Buenos dias Dr. @Model.Medico.Apellido</p>
+    <br />
+    <div>
+        <form asp-action="Buscar" asp-controller="Medico">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <!--label asp-for="Usuario" class="control-label"></!--label -->
+                <input asp-for="IDPaciente" class="form-control" placeholder="GrupoSocio/NroSocio" />
+
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Buscar" class="btn btn-primary" />
+            </div>
+
+            <input type="hidden" asp-for="@Model.Medico.Matricula" />
+            <input type="hidden" asp-for="@Model.Medico.Apellido" />
+            <input type="hidden" asp-for="@Model.Medico.Nombre" />
+            <input type="hidden" asp-for="@Model.Medico.Especialidad" />
+
+        </form>
+    </div>
+    </p>
+
+</div>
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
